@@ -5,6 +5,7 @@ export type UserAnswer = {
 
 export type Answer = {
   uuid: string,
+  correct: boolean,
   answer: string,
   explain: string,
 }
