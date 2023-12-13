@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import router from './router'
-import HomeView from '@/views/HomeView.vue'
 
 const navRoutes = [
   { path: '/', name: '首页' },
   { path: '/about', name: '关于' },
-  { path: '/room', name: '房间' }
+  { path: '/bank', name: '题库' }
 ]
 </script>
 
