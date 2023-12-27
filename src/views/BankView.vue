@@ -1,5 +1,19 @@
 <script setup>
 import BankSelectList from "@/components/BankSelectList.vue"
+import { useBankStore } from "@/stores/bank"
+
+const store = useBankStore();
+store.topselect = [];
+store.sortBy = null;
+store.sortOrderDec = true;
+
+const handleSortBy = (item) => {
+  if (store.sortBy == item) {
+    store.sortOrderDec = ! store.sortOrderDec;
+  } else {
+    store.sortBy = item;
+  }
+}
 
 const items = [ "a", "b", "c" ]
 
@@ -76,14 +90,13 @@ const data = {
             </div>
             <div class=" flex flex-row space-x-8">
               
-              <div v-for="select in ['a']" :key="select">
-                <div class=" text-white hover:cursor-pointer bg-green-500 px-4 py-0.5 rounded-sm font-light"> 
+              <div v-for="select in ['a', 'b', 'c', 'd']" :key="select"
+                @click="store.topselect[item] = select;">
+                <div v-if="store.topselect[item] == select"
+                class=" text-white hover:cursor-pointer bg-green-500 px-4 py-0.5 rounded-sm font-light"> 
                   {{ select }}
                 </div>
-              </div>
-
-              <div v-for="select in ['b', 'c', 'd']" :key="select">
-                <div class=" text-black hover:cursor-pointer bg-white px-4 py-0.5 rounded-sm font-light hover:text-green-500"> 
+                <div v-else class=" text-black hover:cursor-pointer bg-white px-4 py-0.5 rounded-sm font-light hover:text-green-500"> 
                   {{ select }}
                 </div>
               </div>
@@ -97,28 +110,19 @@ const data = {
       <div class=" flex-1 flex flex-col shadow-lg">
         <div class=" bg-gray-100 flex">
 
-          <div class=" shadow-sm border border-gray-200 m-2 text-xs px-2 py-1 flex flex-row space-x-1 
-          hover:border-red-500 hover:text-red-500 hover:cursor-pointer "> 
-            <div> 发布时间 </div>
-            <div> U </div>
-          </div>
-
-          <div class=" shadow-sm border border-gray-200 m-2 text-xs px-2 py-1 flex flex-row space-x-1 
-          hover:border-red-500 hover:text-red-500 hover:cursor-pointer"> 
-            <div> 热度 </div>
-            <div> U </div>
-          </div>
-
-          <div class=" shadow-sm border border-gray-200 m-2 text-xs px-2 py-1 flex flex-row space-x-1 
-          hover:border-red-500 hover:text-red-500 hover:cursor-pointer"> 
-            <div> 题数 </div>
-            <div> U </div>
-          </div>
-
-          <div class=" shadow-sm border border-gray-200 m-2 text-xs px-2 py-1 flex flex-row space-x-1 
-          hover:border-red-500 hover:text-red-500 hover:cursor-pointer"> 
-            <div> 名称  </div>
-            <div> U </div>
+          <div v-for="item in ['发布时间', '热度', '题数', '名称']" :key="item" 
+            @click="handleSortBy(item)">
+            <div v-if="store.sortBy != item" class=" shadow-sm border border-gray-200 m-2 text-xs px-2 py-1 flex flex-row space-x-1 
+          hover:border-green-500 hover:text-green-500 hover:cursor-pointer "> 
+              <div> {{ item }} </div>
+              <div> V </div>
+            </div>
+            <div v-else class="shadow-sm border m-2 text-xs px-2 py-1 flex flex-row space-x-1 
+          bg-green-500 text-white hover:cursor-pointer ">
+              <div> {{ item }} </div>
+              <div v-if="store.sortOrderDec"> V </div>
+              <div v-else> A </div>
+            </div>
           </div>
 
         </div>

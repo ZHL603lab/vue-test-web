@@ -188,6 +188,7 @@ function classQuestionStateItem(i: number) {
     }
   }
 }
+
 function classSelectId(id: string) {
   const basic = 'h-8 w-8 border ml-4 mr-2 rounded-full flex justify-center items-center '
   if (!triggerShowAnswer.value) {
