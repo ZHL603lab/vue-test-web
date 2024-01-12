@@ -10,9 +10,20 @@ const navRoutes = [
 
 <template>
   <div class="bg-white flex flex-col min-h-screen">
-    <header class="flex w-full bg-white shadow-md">
-      <div v-for="route in navRoutes" :key="route.path" class="p-2 m-2">
-        <RouterLink :to="route.path">{{ route.name }}</RouterLink>
+    <header class="flex flex-row w-full bg-white shadow-md justify-center items-center h-14 px-8">
+      <div class="flex flex-row space-x-8">
+        <div v-for="route in navRoutes" :key="route.path">
+          <RouterLink :to="route.path">{{ route.name }}</RouterLink>
+        </div>
+      </div>
+      <div class="flex-1"></div>
+      <div>
+        <div v-if="1" class="flex flex-row space-x-8">
+          <div>登录</div>
+          <div>注册</div>
+        </div>
+
+        <div v-if="0"></div>
       </div>
     </header>
 
