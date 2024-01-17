@@ -19,7 +19,7 @@
       <div class="bg-gray-100">
         <div class="flex flex-row w-4/5 mx-auto" id="main_info">
           <div
-            class="basis-1/5 flex flex-col border border-green-500 rounded-md bg-white"
+            class=" hidden basis-1/5 sm:flex flex-col border border-green-500 rounded-md bg-white"
             id="main_info_left"
           >
             <div class="flex flex-row" id="head_type">
@@ -84,7 +84,7 @@
                 </div>
               </div>
 
-              <div class="bg-white my-2" id="main_info_right">
+              <div class=" hidden sm:flex bg-white my-2" id="main_info_right">
                 ACTION
               </div>
             </div>
@@ -93,16 +93,27 @@
 
         <div v-for="i in 4" :key="i">
           <div class=" w-4/5 mx-auto pt-4 bg-gray-100">
-            <div class="bg-white py-5">
+            <div class="bg-white pt-5">
+
               <div class=" border-l-4 border-green-500 pl-4 text-xl" id="content_title">
                 TITLE
               </div>
-              <div class=" flex flex-col px-4" id="content_list">
+
+              <div class=" flex flex-col sm:hidden mt-2">
+                <div v-for="i in 10" :key="i">
+                  <div class=" flex items-center pl-4 py-2 active:bg-gray-100 border-t border-gray-50">
+                    item
+                  </div>
+                </div>
+            </div>
+
+              <div class=" hidden sm:flex sm:flex-col px-4" id="content_list">
                 <div v-for="i in 10" :key="i" class=" flex flex-row">
                   <div class=" basis-1/2">a</div>
                   <div class=" basis-1/2">b</div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
