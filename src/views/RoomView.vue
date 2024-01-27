@@ -1,8 +1,33 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import axios from 'axios'
+import { useRoute, useRouter } from "vue-router";
+
 import RoomQuestionButton from '@/components/RoomQuestionButton.vue'
 import { type Question } from '@/types/questions.types'
 import { type UserAnswer, type Answer } from '@/types/answers.types'
+
+const router = useRouter()
+const route = useRoute()
+
+let config = {
+    headers: {
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+        'Authorization': '', // 可选：如果需要验证，请在请求头中添加令牌  
+    },
+};
+
+function getQuestion(id: string) {
+  axios.get("http://jsjxxw.cn:3009/api/p/getquestion", { 
+    params: {
+      paper_id: id,
+    }, headers: config.headers,
+  }).then(function (res) {
+      console.log(res.data);
+    })
+}
+
+getQuestion(route.params.id);
 
 const {
   testName,
@@ -244,6 +269,7 @@ function handleQuestionId({ type, id }: { type: string; id: number }) {
     questionIndex.value = id
   }
 }
+
 </script>
 
 <template>
@@ -266,10 +292,8 @@ function handleQuestionId({ type, id }: { type: string; id: number }) {
           <div class="flex flex-col my-4">
             <div
               class="flex flex-row items-center p-2 hover:bg-gray-100 transition ease-in-out duration-500 hover:cursor-pointer"
-              v-for="select in questions[questionIndex].selects"
-              :key="questionIndex + select.id"
-              @click="handleUserSelects({ type: 'select', id: select.id })"
-            >
+              v-for="select in questions[questionIndex].selects" :key="questionIndex + select.id"
+              @click="handleUserSelects({ type: 'select', id: select.id })">
               <div :class="classSelectId(select.id)">{{ select.id }}</div>
               <div>{{ select.text }}</div>
             </div>
@@ -290,37 +314,19 @@ function handleQuestionId({ type, id }: { type: string; id: number }) {
       </div>
 
       <div class="flex justify-center space-x-8">
-        <RoomQuestionButton
-          value="上一题"
-          v-show="questionIndex > 0"
-          @click="handleQuestionId({ type: 'step', id: -1 })"
-        />
-        <RoomQuestionButton
-          value="下一题"
-          v-show="questionIndex < questions.length - 1"
-          @click="handleQuestionId({ type: 'step', id: 1 })"
-        />
-        <RoomQuestionButton
-          value="提交"
-          v-show="questionIndex == questions.length - 1 && !triggerShowAnswer"
-          @click="handleUserSelects({ type: 'confirm' })"
-        />
-        <RoomQuestionButton
-          value="清除"
-          v-show="userSelects[questionIndex] && !triggerShowAnswer"
-          @click="userSelects[questionIndex] = null"
-        />
+        <RoomQuestionButton value="上一题" v-show="questionIndex > 0" @click="handleQuestionId({ type: 'step', id: -1 })" />
+        <RoomQuestionButton value="下一题" v-show="questionIndex < questions.length - 1"
+          @click="handleQuestionId({ type: 'step', id: 1 })" />
+        <RoomQuestionButton value="提交" v-show="questionIndex == questions.length - 1 && !triggerShowAnswer"
+          @click="handleUserSelects({ type: 'confirm' })" />
+        <RoomQuestionButton value="清除" v-show="userSelects[questionIndex] && !triggerShowAnswer"
+          @click="userSelects[questionIndex] = null" />
       </div>
 
-      <div
-        class="absolute w-full h-full top-0 left-0 flex items-center justify-center bg-gray-300 opacity-80"
-        v-show="windowUserSelectsConfirm || windowUserSelectsSubmit || windowPauseTime"
-      >
+      <div class="absolute w-full h-full top-0 left-0 flex items-center justify-center bg-gray-300 opacity-80"
+        v-show="windowUserSelectsConfirm || windowUserSelectsSubmit || windowPauseTime">
         <!-- 提交确认框 -->
-        <div
-          class="flex w-1/3 bg-white shadow-lg flex-col rounded-xl"
-          v-show="windowUserSelectsConfirm"
-        >
+        <div class="flex w-1/3 bg-white shadow-lg flex-col rounded-xl" v-show="windowUserSelectsConfirm">
           <div class="py-2 px-4 w-full bg-gray-100 font-bold text-xl rounded-t-xl">提醒</div>
           <div class="flex-1 p-4 flex flex-col justify-center">
             <div>确定要提交吗？</div>
@@ -328,42 +334,31 @@ function handleQuestionId({ type, id }: { type: string; id: number }) {
           <div class="flex flex-col sm:flex-row items-center border-t border-gray-300">
             <div
               class="flex-1 flex justify-center py-2 hover:cursor-pointer hover:bg-gray-100 duration-300 active:bg-gray-300"
-              @click="handleUserSelects({ type: 'submit' })"
-            >
+              @click="handleUserSelects({ type: 'submit' })">
               确定
             </div>
             <div class="border-l border-gray-300 h-1/2"></div>
             <div
               class="flex-1 flex justify-center py-2 hover:cursor-pointer hover:bg-gray-100 duration-300 active:bg-gray-300"
-              @click="windowUserSelectsConfirm = false"
-            >
+              @click="windowUserSelectsConfirm = false">
               取消
             </div>
           </div>
         </div>
 
         <!-- 提交加载框 -->
-        <div
-          class="flex bg-white flex-col p-5 space-y-4 rounded-lg justify-center items-center"
-          v-show="windowUserSelectsSubmit"
-        >
+        <div class="flex bg-white flex-col p-5 space-y-4 rounded-lg justify-center items-center"
+          v-show="windowUserSelectsSubmit">
           <div class="flex flex-row items-center space-x-2 justify-center">
             <div class="h-4 w-4 animate-spin bg-purple-600"></div>
             <div>请耐心等待，结果正在飞速加载中...</div>
           </div>
           <div class="flex space-x-2 flex-row">
-            <div
-              class="p-2 w-4 h-4 rounded-full animate-bounce bg-red-600"
-              style="animation-delay: 0s"
-            ></div>
-            <div
-              class="p-2 w-4 h-4 rounded-full animate-bounce delay-75 bg-yellow-500"
-              style="animation-delay: 0.1s"
-            ></div>
-            <div
-              class="p-2 w-4 h-4 rounded-full animate-bounce delay-150 bg-green-600"
-              style="animation-delay: 0.2s"
-            ></div>
+            <div class="p-2 w-4 h-4 rounded-full animate-bounce bg-red-600" style="animation-delay: 0s"></div>
+            <div class="p-2 w-4 h-4 rounded-full animate-bounce delay-75 bg-yellow-500" style="animation-delay: 0.1s">
+            </div>
+            <div class="p-2 w-4 h-4 rounded-full animate-bounce delay-150 bg-green-600" style="animation-delay: 0.2s">
+            </div>
           </div>
         </div>
 
@@ -380,14 +375,11 @@ function handleQuestionId({ type, id }: { type: string; id: number }) {
           </div>
           <div v-show="!triggerSubmitSelects" class="border border-dashed border-gray-50"></div>
 
-          <div
-            v-show="!triggerSubmitSelects"
+          <div v-show="!triggerSubmitSelects"
             class="my-2 md:my-0 md:mx-2 basis-1/4 flex flex-col items-center hover:cursor-pointer"
-            @click="switchPauseTime({ state: undefined })"
-          >
+            @click="switchPauseTime({ state: undefined })">
             <div
-              class="flex justify-center items-center border-2 border-white rounded-full w-8 h-8 hover:text-blue-400 hover:bg-white transition ease-in-out duration-500"
-            >
+              class="flex justify-center items-center border-2 border-white rounded-full w-8 h-8 hover:text-blue-400 hover:bg-white transition ease-in-out duration-500">
               <span v-if="triggerPauseTime">C</span>
               <span v-else>P</span>
             </div>
@@ -407,10 +399,7 @@ function handleQuestionId({ type, id }: { type: string; id: number }) {
         <div class="flex justify-center text-xl p-2 bg-gray-50">答题卡</div>
         <div class="flex flex-wrap content-between max-h-80 overflow-scroll px-2 justify-center">
           <template v-for="(item, i) in questions" :key="i">
-            <div
-              :class="classQuestionStateItem(i)"
-              @click="handleQuestionId({ type: 'set', id: i })"
-            >
+            <div :class="classQuestionStateItem(i)" @click="handleQuestionId({ type: 'set', id: i })">
               {{ i }}
             </div>
           </template>

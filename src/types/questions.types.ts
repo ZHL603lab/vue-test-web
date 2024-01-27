@@ -1,4 +1,4 @@
-export type RawQuestion = {
+export type QuestionRaw = {
   uuid: string
   subjectId: string
   chapterId: string
