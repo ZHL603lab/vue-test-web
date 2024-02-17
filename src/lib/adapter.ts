@@ -1,24 +1,59 @@
-import { type CourseRaw, type Course, type CourseSubRaw } from "@/types/courses.types";
+import {type Question, type QuestionRaw, type QuestionOption, type QuestionSubItem} from "@/types/views/room.types";
 
-export async function adapterCourse(courseRaw: CourseRaw) : Course {
+function adapterQuestion(questionRaw: QuestionRaw) : Question {
 
-  const childRaw: CourseSubRaw[] = [];
+  const res : Question = {};
+  res.id = questionRaw.id;
+  res.typeId = questionRaw.type;
+  res.pId = questionRaw.p_id;
+  res.type = "暂不支持";
 
-  for (let i = 0; i < courseRaw.child.length; ++i) {
-    const sub = courseRaw.child[i];
-    childRaw.push({
-      type: sub.course_type,
-      name: sub.type_name,
-    })
+  if (questionRaw.type == '1') {
+    res.type = "选择题";
+    res.body = questionRaw.main_part;
+  }
+  if (questionRaw.type == '16') {
+    res.type = "填空题";
+    res.body = questionRaw.main_part
+        .replace(/###/g, "_____");
   }
 
-  const course: Course = {
-    type: courseRaw.dict_type,
-    stage: courseRaw.course_stage,
-    label: courseRaw.dict_label,
-    child: childRaw,
-  };
+  const subitems: QuestionSubItem[] = [];
+  if (questionRaw.select_a != "")
+    subitems.push({
+      id: questionRaw.id + "_A", value: undefined,
+      text: questionRaw.select_a
+    })
+  if (questionRaw.select_b != "")
+    subitems.push({
+      id: questionRaw.id + "_B", value: undefined,
+      text: questionRaw.select_b
+    })
+  if (questionRaw.select_c != "")
+    subitems.push({
+      id: questionRaw.id + "_C", value: undefined,
+      text: questionRaw.select_c
+    })
+  if (questionRaw.select_d != "")
+    subitems.push({
+      id: questionRaw.id + "_D", value: undefined,
+      text: questionRaw.select_d
+    })
 
-  return course;
+  res.subitems = subitems;
 
+  return res;
+}
+
+function adapterQuestions(questionsRaw: QuestionRaw[]) : Question[] {
+  const questions : Question[] = [];
+  for (let i = 0; i < questionsRaw.length; ++i) {
+    questions.push(adapterQuestion(questionsRaw[i]));
+  }
+  return questions;
+}
+
+export const adapter = {
+  adapterQuestion,
+  adapterQuestions,
 }
