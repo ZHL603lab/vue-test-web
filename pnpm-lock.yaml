@@ -26,9 +26,6 @@ dependencies:
   lucide-vue-next:
     specifier: ^0.314.0
     version: 0.314.0(vue@3.3.10)
-  mathjax-vue:
-    specifier: ^1.0.1
-    version: 1.0.1(vue@3.3.10)
   mathjax-vue3:
     specifier: ^1.0.1
     version: 1.0.1(vue@3.3.10)
@@ -3398,14 +3395,6 @@ packages:
     resolution: {integrity: sha512-d7WNRe0Uf3zFJ3Duey53MZKyTnhm2Ae2oOnHG8NW5Fqc9HZFHRbNh4gZZyPr1SYxCct6htVPmsUFUPfVQKaDag==}
     peerDependencies:
       vue: ^3.2.0
-    dependencies:
-      vue: 3.3.10(typescript@5.2.2)
-    dev: false
-
-  /mathjax-vue@1.0.1(vue@3.3.10):
-    resolution: {integrity: sha512-kzx8nPsAo4KMlyoL5Nl8kHXsyI6S7bykLfLDZPctfMPOAaHqdFV6rT8EeWmYtjRMW0gARwXkZ1LTKenfwE2y8g==}
-    peerDependencies:
-      vue: ^2.6.0
     dependencies:
       vue: 3.3.10(typescript@5.2.2)
     dev: false

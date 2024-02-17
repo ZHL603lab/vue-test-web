@@ -14,12 +14,12 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
-	},
-	"config": {
-		"commitizen": {
-			"path": "node_modules/cz-git"
-		}
-	},
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git"
+    }
+  },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.1",
     "@vee-validate/zod": "^4.12.5",
@@ -28,7 +28,6 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-vue-next": "^0.314.0",
-    "mathjax-vue": "^1.0.1",
     "mathjax-vue3": "^1.0.1",
     "pinia": "^2.1.7",
     "radix-vue": "^1.3.2",
