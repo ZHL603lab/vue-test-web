@@ -63,19 +63,25 @@ import {
         <div class=" px-4 py-4">LOGO</div>
 
         <div v-for="route in navRoutes" :key="route.path">
-          <div class=" px-4 py-4 hover:bg-gray-100">
-            <RouterLink :to="route.path">{{ route.name }}</RouterLink>
-          </div>
+          <RouterLink :to="route.path">
+            <div class=" px-4 py-4 hover:bg-gray-100">
+              {{ route.name }}
+            </div>
+          </RouterLink>
         </div>
 
         <div class="flex-1"></div>
         <div v-if="1" class="flex flex-row">
-          <div class=" px-4 py-4 hover:bg-gray-100">
-            <RouterLink to="/user/login">登录</RouterLink>
-          </div>
-          <div class=" px-4 py-4 hover:bg-gray-100">
-            <RouterLink to="/user/signup">注册</RouterLink>
-          </div>
+          <RouterLink to="/user/login">
+            <div class=" px-4 py-4 hover:bg-gray-100">
+              登录
+            </div>
+          </RouterLink>
+          <RouterLink to="/user/signup">
+            <div class=" px-4 py-4 hover:bg-gray-100">
+              注册
+            </div>
+          </RouterLink>
         </div>
         <div v-if="0"></div>
       </div>
@@ -92,5 +98,3 @@ import {
     </footer>
   </div>
 </template>
-
-<style scoped></style>
